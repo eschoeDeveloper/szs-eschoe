@@ -1,6 +1,5 @@
 package com.szs.restapi.domains.user;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface UserRepository extends JpaRepository<Object, Object> {
+public interface UserRepository {
+//        extends JpaRepository<Object, Object> {
 }
