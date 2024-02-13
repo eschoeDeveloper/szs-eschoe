@@ -29,9 +29,11 @@ repositories {
 // annotationProcessor : 컴파일 단계에서 Annotation에 정의된 일렬의 프로세스를 동작하게 하는 것
 // testImplementation : 테스트 단계에서 컴파일 + 런타임이며, 빌드 결과물에도 포함된다. 테스트 코드 레벨에서 참조 가능
 dependencies {
+	implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("io.jsonwebtoken:jjwt-api:0.12.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
