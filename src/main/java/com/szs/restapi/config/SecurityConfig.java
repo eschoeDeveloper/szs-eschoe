@@ -1,41 +1,69 @@
 package com.szs.restapi.config;
 
+import com.szs.restapi.globals.jwt.JwtAuthenticationFilter;
+import com.szs.restapi.globals.jwt.JwtTokenProvider;
+import com.szs.restapi.globals.security.SzsUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
+public class SecurityConfig  {
 
-    // 허용 URL
-    private final String[] allowedUrl = {"/swagger-ui/**", "/szs/signup", "/szs/login"};
+    private final JwtTokenProvider jwtTokenProvider;
+    private final SzsUserDetailsService szsUserDetailsService;
+
+    private static final AntPathRequestMatcher[] ALLOWED_URL_LIST = {
+       new AntPathRequestMatcher("/h2-console/**"),
+       new AntPathRequestMatcher("/szs/login"),
+       new AntPathRequestMatcher("/szs/signup"),
+       new AntPathRequestMatcher("/swagger-ui/**"),
+       new AntPathRequestMatcher("/swagger-ui.html"),
+       new AntPathRequestMatcher("/"),
+       new AntPathRequestMatcher("/css/**"),
+       new AntPathRequestMatcher("/images/**"),
+       new AntPathRequestMatcher("/js/**"),
+    };
+
 
     @Bean("securityFilterChain")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        requests -> {
-                            // 회원가입, 로그인, 스웨거 페이지를 제외한 모든 요청에 대한 인증 받기
-                            requests.requestMatchers(allowedUrl).permitAll()
-                                    .anyRequest().authenticated();
-                        }
+        http.csrf((csrf) -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .formLogin((form) -> form.disable())
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .sessionManagement(sessionManagerment -> sessionManagerment.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS
+                ))
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers(ALLOWED_URL_LIST).permitAll()
+                                .anyRequest().permitAll()
                 )
-                .sessionManagement(sessionManagement -> {
-                    // 쿠키 및 세션 사용 안함
-                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
-                .build();
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, szsUserDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/"));
+
+        return http.build();
 
     }
 
@@ -47,6 +75,11 @@ public class SecurityConfig {
     @Bean("passwordEncoder")
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean("webSecurityCustomizer")
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(ALLOWED_URL_LIST);
     }
 
 }

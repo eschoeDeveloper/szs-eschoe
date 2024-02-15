@@ -26,10 +26,11 @@ public class JwtTest {
         String keyPlainTextByBase64 = encoder.encodeToString(keyPlainText.getBytes(StandardCharsets.UTF_8));
 
         SecretKey secretKey = Keys.hmacShaKeyFor(keyPlainTextByBase64.getBytes());
+        byte[] secretKeyBytes = secretKey.getEncoded();
 
-        logger.debug(secretKey.getEncoded().toString());
+        String secretKeyPlainText = Base64.getEncoder().encodeToString(secretKeyBytes);
 
-        assertThat(secretKey).isNotNull();
+        assertThat(secretKeyPlainText).isNotNull();
 
     }
 

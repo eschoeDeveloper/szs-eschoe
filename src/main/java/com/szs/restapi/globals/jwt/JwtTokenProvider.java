@@ -1,6 +1,6 @@
 package com.szs.restapi.globals.jwt;
 
-import com.szs.restapi.domains.user.UserDTO;
+import com.szs.restapi.domain.user.UserDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -52,19 +52,18 @@ public class JwtTokenProvider {
                 .build();
 
         String jwtToken = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(Date.from(now.toInstant()))
-                .setExpiration(Date.from(now.plusHours(expirationHours).toInstant()))
-                .signWith(secretHmacKey, SignatureAlgorithm.HS256)
+                .claims(claims)
+                .issuedAt(Date.from(now.toInstant()))
+                .expiration(Date.from(now.plusHours(expirationHours).toInstant()))
+                .signWith(secretHmacKey)
                 .compact();
-
 
         return jwtToken;
 
     }
 
     public String getUserId(String jwtToken) {
-        return parseClaims(jwtToken).get("memberId", String.class);
+        return parseClaims(jwtToken).get("userId", String.class);
     }
 
     public boolean validateJwtToken( String jwtToken ) {
@@ -76,23 +75,21 @@ public class JwtTokenProvider {
             Claims parseClaims = parseClaims(jwtToken);
             return true;
         } catch ( SecurityException | MalformedJwtException exception ) {
-
+            throw new RuntimeException("JWT Token 오류 :: "+ exception.getMessage());
         } catch( ExpiredJwtException exception ) {
-
+            throw new RuntimeException("JWT Token 오류 :: "+ exception.getMessage());
         } catch( UnsupportedJwtException exception ) {
-
+            throw new RuntimeException("JWT Token 오류 :: "+ exception.getMessage());
         } catch( IllegalArgumentException exception ) {
-
+            throw new RuntimeException("JWT Token 오류 :: "+ exception.getMessage());
         }
-
-        return false;
 
     }
 
     public Claims parseClaims( String jwtToken ) {
 
         try {
-            return Jwts.parser().setSigningKey(secretHmacKey).build().parseClaimsJws(jwtToken).getBody();
+            return Jwts.parser().setSigningKey(secretHmacKey).build().parseSignedClaims(jwtToken).getPayload();
         } catch(ExpiredJwtException exception) {
             return exception.getClaims();
         }
