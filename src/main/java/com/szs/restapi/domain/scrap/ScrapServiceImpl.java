@@ -46,8 +46,10 @@ public class ScrapServiceImpl implements ScrapService {
         httpParams.put("name", name);
         httpParams.put("regNo", regNo);
 
+        // 스크래핑 데이터 요청
         JSONObject resultMap = restAPIConnector.connect("https://codetest.3o3.co.kr/v2/scrap", HttpMethod.POST, httpParams);
 
+        // 스크래핑 후 DB 저장
         if(resultMap.getString("status").equals("success") && resultMap.has("data")) {
 
             final String workCostColumn = "총지급액";

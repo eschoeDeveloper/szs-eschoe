@@ -1,6 +1,7 @@
 package com.szs.restapi.domain.user;
 
 
+import com.szs.restapi.globals.component.CryptoFieldConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class UserEntity {
     private String name;
 
     @Column(name = "reg_no")
+    @Convert(converter = CryptoFieldConverter.class)
     private String regNo;
 
 }
