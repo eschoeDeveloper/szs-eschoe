@@ -1,4 +1,4 @@
-package com.szs.restapi.domains.scrap;
+package com.szs.restapi.domain.scrap;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
