@@ -19,8 +19,12 @@ public class H2Runner implements ApplicationRunner {
 
     private final DataSource dataSource;
 
-    private final JdbcTemplate jdbcTemplate;
-
+    /**
+     * H2 Database Table 생성 실행
+     *
+     * @param args the args
+     * @throws Exception the exception
+     */
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
@@ -46,9 +50,13 @@ public class H2Runner implements ApplicationRunner {
 
     }
 
+    /**
+     * 사용자 화이트리스트 테이블의 사용자 데이터
+     *
+     * @return the user white list
+     */
     private List<Map<String, Object>> getUserWhiteList() {
 
-        // 사용자 화이트리스트 테이블에 제시된 사용자들 추가
         return new ArrayList<>() {{
 
             add(Map.ofEntries(
@@ -76,6 +84,11 @@ public class H2Runner implements ApplicationRunner {
 
     }
 
+    /**
+     * 사용자 화이트리스트 테이블 DDL
+     *
+     * @return the string
+     */
     private String ddlUserWhiteListTable() {
 
         StringBuilder sb = new StringBuilder();
@@ -91,6 +104,11 @@ public class H2Runner implements ApplicationRunner {
 
     }
 
+    /**
+     * 사용자 테이블 DDL
+     *
+     * @return the string
+     */
     private String ddlUserTable() {
 
         StringBuilder sb = new StringBuilder();
@@ -107,6 +125,11 @@ public class H2Runner implements ApplicationRunner {
 
     }
 
+    /**
+     * 스크래핑 테이블 DDL
+     *
+     * @return the string
+     */
     private String ddlScrappingTable() {
 
         StringBuilder sb = new StringBuilder();
@@ -128,6 +151,11 @@ public class H2Runner implements ApplicationRunner {
 
     }
 
+    /**
+     * 사용자 화이트리스트 데이터 추가
+     *
+     * @return the string
+     */
     private String insertUserWhiteListTable() {
 
         List<Map<String, Object>> userWhiteList = this.getUserWhiteList();
@@ -144,8 +172,6 @@ public class H2Runner implements ApplicationRunner {
 
         String insertQuery = sb.toString();
         insertQuery = insertQuery.substring(0, insertQuery.length() - 1) + ";";
-
-        System.out.println(insertQuery);
 
         return insertQuery;
 
