@@ -1,5 +1,6 @@
-package com.szs.restapi.domains.refund;
+package com.szs.restapi.domain.refund;
 
+import com.szs.restapi.globals.security.SzsUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,10 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "사용자 결정세액 조회 API", description = "사용자 결정세액을 조회하기 위한 API입니다.")
 @Log4j2
@@ -36,8 +35,8 @@ public class RefundController {
                     , content = @Content(schema = @Schema(implementation = RefundDTO.class)))
     })
     @PostMapping(value="/refund", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> refund (@RequestBody RefundDTO refundDTO) {
-        return ResponseEntity.ok(refundService.hashCode());
+    public ResponseEntity<?> refund (@RequestHeader("Authorization") String accessToken, @AuthenticationPrincipal SzsUserDetails userDetails) throws Exception {
+        return ResponseEntity.ok(refundService.execute(accessToken, userDetails));
     }
 
 }

@@ -73,10 +73,7 @@ public class ScrapServiceImpl implements ScrapService {
 
             }
 
-            // 쉼표로 구분하여 포맷팅하기 위한 패턴 생성
-            DecimalFormat decimalFormat = new DecimalFormat("#,###");
-            // 포맷 적용하여 문자열로 변환
-            String totalWorkCost = decimalFormat.format(calculateTotalWorkCost);
+            String totalWorkCost = new DecimalFormat("#,###").format(calculateTotalWorkCost);
 
             ScrapEntity scrapEntity = new ScrapEntity();
 

@@ -1,4 +1,4 @@
-package com.szs.restapi.domains.refund;
+package com.szs.restapi.domain.refund;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
