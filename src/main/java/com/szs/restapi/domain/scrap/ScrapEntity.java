@@ -1,6 +1,8 @@
 package com.szs.restapi.domain.scrap;
 
+import com.szs.restapi.globals.component.CryptoFieldConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
@@ -18,6 +20,7 @@ public class ScrapEntity {
 
     @Id
     @Column(name = "주민등록번호")
+    @Convert(converter = CryptoFieldConverter.class)
     private String 주민등록번호;
 
     @Column(name = "총지급액")
