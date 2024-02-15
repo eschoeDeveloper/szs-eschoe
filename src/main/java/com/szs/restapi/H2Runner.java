@@ -114,7 +114,7 @@ public class H2Runner implements ApplicationRunner {
         sb.append("CREATE TABLE IF NOT EXISTS SZS_SCRAPPING ( ");
         sb.append("  이름 VARCHAR(100), ");
         sb.append("  주민등록번호 VARCHAR(100), ");
-        sb.append("  총지급급여액 VARCHAR(200), ");
+        sb.append("  총지급액 VARCHAR(200), ");
         sb.append("  산출세액 VARCHAR(200), ");
         sb.append("  보험료 VARCHAR(200), ");
         sb.append("  교육비 VARCHAR(200), ");
