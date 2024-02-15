@@ -1,4 +1,4 @@
-package com.szs.restapi.domains.user;
+package com.szs.restapi.domain.user;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
@@ -37,8 +36,8 @@ public class UserController {
                     , content = @Content(schema = @Schema(implementation = UserDTO.class)))
     })
     @PostMapping(value="/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody @Valid UserDTO userDTO) {
-        return ResponseEntity.ok(userService.hashCode());
+    public ResponseEntity<?> login(@RequestBody UserDTO userDTO)  {
+        return ResponseEntity.ok(userService.login(userDTO));
     }
 
     @Operation(summary = "사용자 회원가입", description = "사용자 회원가입을 실행합니다.")
@@ -53,8 +52,8 @@ public class UserController {
                     , content = @Content(schema = @Schema(implementation = UserDTO.class)))
     })
     @PostMapping(value="/signup", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> signup(@RequestBody @Valid UserDTO userDTO) {
-        return ResponseEntity.ok(userService.hashCode());
+    public ResponseEntity<?> signup(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.signUp(userDTO));
     }
 
 }
