@@ -1,10 +1,9 @@
 package com.szs.restapi.domain.scrap;
 
 import com.szs.restapi.globals.security.SzsUserDetails;
-import org.json.JSONObject;
+
+import java.util.Map;
 
 public interface ScrapService {
-
-    JSONObject execute(String accessToken, SzsUserDetails userDetails) throws Exception;
-
+    Map<String, Object> execute(String accessToken, SzsUserDetails userDetails) throws Exception;
 }

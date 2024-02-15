@@ -1,4 +1,6 @@
 package com.szs.restapi.domain.scrap;
 
-public class ScrapRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ScrapRepository extends JpaRepository<ScrapEntity, Object> {
 }
