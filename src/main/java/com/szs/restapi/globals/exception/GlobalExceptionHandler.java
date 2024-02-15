@@ -21,6 +21,18 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(RuntimeException.class)
+    protected ResponseEntity<?> runtimeException( RuntimeException exception ) {
+
+        Map<String, Object> handleMethodArgumentNotValid = new HashMap<>(){{
+            put("message", "요청 오류 :: " + exception.getMessage());
+        }};
+
+        JSONPObject errorResponseJson = new JSONPObject("JSON.parse", handleMethodArgumentNotValid);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
     /**
      * API 호출 시 '객체' 혹은 '파라미터' 데이터 값이 유효하지 않은 경우
      *
@@ -35,7 +47,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", handleMethodArgumentNotValid);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -53,7 +65,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", handleMethodTypeMismatchNotValid);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -71,7 +83,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", missingRequestHeader);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -89,7 +101,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", httpMessageNotReadable);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -107,7 +119,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", missingServletRequestParameter);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -125,7 +137,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", badRequest);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -143,7 +155,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", noHandlerFound);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -161,7 +173,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", nullPointerException);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -179,7 +191,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", ioException);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -197,7 +209,7 @@ public class GlobalExceptionHandler {
         }};
 
         JSONPObject errorResponseJson = new JSONPObject("JSON.parse", jsonProcessingException);
-        return new ResponseEntity<>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponseJson.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
